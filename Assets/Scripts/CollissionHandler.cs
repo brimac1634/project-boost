@@ -7,6 +7,8 @@ public class CollissionHandler : MonoBehaviour
     [SerializeField] float levelLoadDelay = 2f;
     [SerializeField] AudioClip crashSound;
     [SerializeField] AudioClip successSound;
+    [SerializeField] ParticleSystem successParticles;
+    [SerializeField] ParticleSystem crashParticles;
 
     private AudioSource _audioSource;
 
@@ -43,6 +45,7 @@ public class CollissionHandler : MonoBehaviour
         
         _audioSource.Stop();
         _audioSource.PlayOneShot(successSound);
+        successParticles.Play();
 
         Invoke("NextLevel", levelLoadDelay);
     }
@@ -56,6 +59,7 @@ public class CollissionHandler : MonoBehaviour
 
         _audioSource.Stop();
         _audioSource.PlayOneShot(crashSound);
+        crashParticles.Play();
 
         Invoke("ReloadLevel", levelLoadDelay);
     }
@@ -69,7 +73,8 @@ public class CollissionHandler : MonoBehaviour
     private void NextLevel()
     {
         int _currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-        int _sceneCount = SceneManager.sceneCount;
+        int _sceneCount = SceneManager.sceneCountInBuildSettings;
+
         if (_currentSceneIndex < _sceneCount - 1)
         {
             SceneManager.LoadScene(_currentSceneIndex + 1);
