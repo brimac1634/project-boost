@@ -13,13 +13,18 @@ public class CollissionHandler : MonoBehaviour
     private AudioSource _audioSource;
 
     private bool _isTransitioning = false;
+    private bool _collisionDisabled = false;
 
     private void Start() {
         _audioSource = GetComponent<AudioSource>();
     }
 
+    private void Update() {
+        ProcessCheats();
+    }
+
     private void OnCollisionEnter(Collision other) {
-        if (_isTransitioning) { return; }
+        if (_isTransitioning || _collisionDisabled) { return; }
 
         switch(other.gameObject.tag)
         {
@@ -36,6 +41,19 @@ public class CollissionHandler : MonoBehaviour
                 break;
         }
     }
+
+    void ProcessCheats()
+    {
+        if (Input.GetKey(KeyCode.L))
+        {
+            NextLevel();
+        } 
+        else if (Input.GetKey(KeyCode.C))
+        {
+            _collisionDisabled = !_collisionDisabled;
+        }
+    }
+
 
     private void StartSuccessSequence()
     {
